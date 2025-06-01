@@ -2,8 +2,8 @@
 Contributors: wpwham
 Tags: woocommerce
 Requires at least: 4.1
-Tested up to: 6.6
-Stable tag: 2.5.13
+Tested up to: 6.8
+Stable tag: 2.5.14
 License: GNU General Public License v3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -70,6 +70,9 @@ Free vs Pro comparison table is [here](https://wpwham.com/products/custom-price-
 6. Custom Price Labels for WooCommerce - Per Product Labels - Custom Price Label Bulk Editor Tool.
 
 == Changelog ==
+
+= 2.5.14 - 2025-06-01 =
+* FIX: PHP notice.
 
 = 2.5.13 - 2024-08-29 =
 * UPDATE: bump tested versions.
