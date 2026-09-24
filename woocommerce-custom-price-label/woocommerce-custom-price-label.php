@@ -3,12 +3,12 @@
 Plugin Name: Custom Price Labels for WooCommerce
 Plugin URI: https://wpwham.com/products/custom-price-labels-for-woocommerce/
 Description: Create any custom price label for any WooCommerce product.
-Version: 2.5.14
+Version: 2.5.15
 Author: WP Wham
 Author URI: https://wpwham.com
 Text Domain: woocommerce-custom-price-label
 Domain Path: /langs
-Copyright: © 2018-2025 WP Wham. All rights reserved.
+Copyright: © 2018-2026 WP Wham. All rights reserved.
 License: GNU General Public License v3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 */
@@ -44,7 +44,7 @@ if ( ! class_exists( 'Woocommerce_Custom_Price_Label' ) ) :
  * Main Woocommerce_Custom_Price_Label Class
  *
  * @class   Woocommerce_Custom_Price_Label
- * @version 2.5.14
+ * @version 2.5.15
  */
 final class Woocommerce_Custom_Price_Label {
 
@@ -56,7 +56,7 @@ final class Woocommerce_Custom_Price_Label {
 	 * @var   string
 	 * @since 2.1.1
 	 */
-	public $version = '2.5.14';
+	public $version = '2.5.15';
 
 	/**
 	 * @var Woocommerce_Custom_Price_Label The single instance of the class
@@ -82,42 +82,23 @@ final class Woocommerce_Custom_Price_Label {
 	/**
 	 * Woocommerce_Custom_Price_Label Constructor.
 	 *
-	 * @version 2.5.14
+	 * @version 2.5.15
 	 */
-	function __construct() {
-
-		// Set up localisation
-		add_action( 'init', array( $this, 'load_localization' ) );
+	public function __construct() {
 
 		// Include required files
-		$this->includes();
+		add_action( 'init', array( $this, 'includes' ) );
 
 		// Admin
 		if ( is_admin() ) {
 			add_filter( 'woocommerce_get_settings_pages', array( $this, 'add_woocommerce_settings_tab' ) );
 			add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( $this, 'action_links' ) );
-			// Settings
-			require_once( 'includes/admin/class-wc-custom-price-label-settings-section.php' );
-			$this->settings = array();
-			$this->settings['general'] = require_once( 'includes/admin/class-wc-custom-price-label-settings-general.php' );
-			$this->settings['global']  = require_once( 'includes/admin/class-wc-custom-price-label-settings-global.php' );
-			$this->settings['local']   = require_once( 'includes/admin/class-wc-custom-price-label-settings-local.php' );
-			add_action( 'woocommerce_system_status_report', array( $this, 'add_settings_to_status_report' ) );
-			if ( get_option( 'alg_wc_custom_price_label_version', '' ) !== $this->version ) {
-				add_action( 'admin_init', array( $this, 'version_updated' ) );
-			}
-			// Per product settings
-			require_once( 'includes/admin/class-wc-custom-price-label-settings-per-product.php' );
-			// Bulk editor tool
-			require_once( 'includes/admin/class-wc-custom-price-label-bulk-editor-tool.php' );
 		}
-	}
-	
-	/**
-	 * @since   2.5.14
-	 */
-	public function load_localization() {
-		load_plugin_textdomain( 'woocommerce-custom-price-label', false, dirname( plugin_basename( __FILE__ ) ) . '/langs/' );
+
+		// Updates
+		if ( get_option( 'alg_wc_custom_price_label_version', '' ) !== $this->version ) {
+			add_action( 'admin_init', array( $this, 'version_updated' ) );
+		}
 	}
 
 	/**
@@ -193,13 +174,29 @@ final class Woocommerce_Custom_Price_Label {
 	/**
 	 * Include required core files used in admin and on the frontend.
 	 *
-	 * @version 2.4.3
+	 * @version 2.5.15
 	 */
-	function includes() {
+	public function includes() {
+		// Localization
+		load_plugin_textdomain( 'woocommerce-custom-price-label', false, dirname( plugin_basename( __FILE__ ) ) . '/langs/' );
 		// Functions
 		require_once( 'includes/wc-custom-price-label-functions.php' );
 		// Core
 		require_once( 'includes/class-wc-custom-price-label.php' );
+		// Admin
+		if ( is_admin() ) {
+			// Settings
+			require_once( 'includes/admin/class-wc-custom-price-label-settings-section.php' );
+			$this->settings = array();
+			$this->settings['general'] = require_once( 'includes/admin/class-wc-custom-price-label-settings-general.php' );
+			$this->settings['global']  = require_once( 'includes/admin/class-wc-custom-price-label-settings-global.php' );
+			$this->settings['local']   = require_once( 'includes/admin/class-wc-custom-price-label-settings-local.php' );
+			add_action( 'woocommerce_system_status_report', array( $this, 'add_settings_to_status_report' ) );
+			// Per product settings
+			require_once( 'includes/admin/class-wc-custom-price-label-settings-per-product.php' );
+			// Bulk editor tool
+			require_once( 'includes/admin/class-wc-custom-price-label-bulk-editor-tool.php' );
+		}
 	}
 
 	/**
